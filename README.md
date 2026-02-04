@@ -29,6 +29,32 @@ There are several sub-packages:
 [obs-packages]: https://build.opensuse.org/package/show/home:MSirringhaus:webauthn_devel/credentialsd
 [release-page]: https://github.com/linux-credentials/credentialsd/releases
 
+<details>
+<summary>NixOS</summary>
+
+```nix
+credentialsd = {
+  url = "github:martijnboers/credentialsd";
+  # Follow your own nixpkgs, might not work
+  # inputs.nixpkgs.follows = "nixpkgs";
+};
+```
+
+Import the module and enable the service:
+
+```nix
+imports = [ inputs.credentialsd.nixosModules.default ];
+
+services.credentialsd.enable = true;
+services.credentialsd.ui.enable = true; # Optional: Installs the GTK4 GUI
+
+environment.systemPackages = [
+  # Optional credentialsd patched firefox
+  inputs.credentialsd.packages.${pkgs.system}.firefox-patched
+];
+```
+</details>
+
 ### From source
 
 Alternatively, you can build the project yourself using the instructions in
